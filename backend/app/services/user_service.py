@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 from app.models.user import User, VerificationCode
 from app.services.email_service import EmailService
-from passlib.hash import bcrypt
 from typing import Optional, Tuple, Dict, Any
 from app.services.auth_service import AuthService
 

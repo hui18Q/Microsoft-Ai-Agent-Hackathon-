@@ -1,9 +1,7 @@
 
 ## Installation
 
-0. Install Ollama
-Visit Ollama's website to download and install
-Pull required models
+0. OPENAI_API_KEY should be set in chat_service to enable access to the DeepSeek V3 model.
 
 1. clone project
 ```bash
