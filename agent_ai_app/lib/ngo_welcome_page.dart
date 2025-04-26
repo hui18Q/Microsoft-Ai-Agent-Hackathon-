@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class WelcomePage extends StatelessWidget {
-  const WelcomePage({super.key});
+class NGOWelcomePage extends StatelessWidget {
+  const NGOWelcomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class WelcomePage extends StatelessWidget {
                   height: 45,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/login');
+                      Navigator.pushNamed(context, '/ngo-login');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 7, 71, 123),
@@ -58,7 +58,7 @@ class WelcomePage extends StatelessWidget {
                   height: 45,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/signup');
+                      Navigator.pushNamed(context, '/ngo-signup');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 7, 71, 123),
@@ -75,10 +75,10 @@ class WelcomePage extends StatelessWidget {
               const SizedBox(height: 10),
               TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/ngo-welcome');
+                  Navigator.pushNamed(context, '/');
                 },
                 child: const Text(
-                  "I'm an Organization",
+                  "I'm a General User",
                   style: TextStyle(decoration: TextDecoration.underline),
                 ),
               ),

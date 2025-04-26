@@ -161,7 +161,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 const Text('Already have an account?'),
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context); // Go back to Login
+                    Navigator.pushNamed(context, '/ngo-login');
                   },
                   child: const Text('Log In'),
                 ),
