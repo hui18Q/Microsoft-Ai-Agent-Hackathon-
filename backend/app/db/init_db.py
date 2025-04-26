@@ -32,6 +32,8 @@ def seed_initial_data():
         db.commit()
         print("已删除关联表数据")
         
+        # db.execute(text("DELETE FROM form_sessions"))
+
         # 删除用户相关数据
         db.execute(text("DELETE FROM user_preferences"))
         db.execute(text("DELETE FROM user_interactions"))
