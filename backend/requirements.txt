@@ -19,3 +19,4 @@ langchain-ollama
 langchain-text-splitters
 langsmith
 langchain_openai
+redis

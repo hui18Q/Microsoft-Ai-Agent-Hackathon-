@@ -3,15 +3,17 @@ from app.schemas.chat import ChatRequest, ChatResponse
 from langchain_openai import ChatOpenAI
 from langchain.agents import create_openai_tools_agent,AgentExecutor,tool
 from langchain_core.prompts import ChatPromptTemplate,MessagesPlaceholder
-from langchain.memory import ChatMessageHistory
+from langchain_community.chat_message_histories import RedisChatMessageHistory
 from langchain.memory import ConversationBufferMemory
 from app.tools import *
 from langchain.agents import AgentExecutor, create_react_agent
 import os
 
-os.environ["OPENAI_API_KEY"] = "sk-"
+os.environ["OPENAI_API_KEY"] = "sk-ykgigojwdmfgzvkroxskrzgowvftaabowfpolxbttbwzfqjz"
 os.environ["OPENAI_API_BASE"] = "https://api.siliconflow.cn/v1"
 os.environ["OPENAI_API_MODEL"] = "deepseek-ai/DeepSeek-V3"
+REDIS_URL = os.getenv("REDIS_URL")
+
 class ChatService:
     def __init__(self):
         self.chatmodel = ChatOpenAI(
@@ -116,8 +118,30 @@ class ChatService:
         )
         
     def get_memory(self):
-        """Get memory object"""
-        return ChatMessageHistory()
+        chat_message_history = RedisChatMessageHistory(
+            url=REDIS_URL,session_id="session"
+        )
+        #chat_message_history.clear()#清空历史记录
+        print("chat_message_history:",chat_message_history.messages)
+        store_message = chat_message_history.messages
+        if len(store_message) > 10:
+            prompt = ChatPromptTemplate.from_messages(
+                [
+                    (
+                        "system",
+                        self.SYSTEM_PROMPT+"\n这是一段你和用户的对话记忆，对其进行总结摘要，摘要使用第一人称'我'，并且提取其中的用户关键信息，如姓名、年龄、性别、出生日期等。以如下格式返回:\n 总结摘要内容｜用户关键信息 \n 例如 用户Jery问候我，我礼貌回复，然后他询问相关信息，我回答了他相关信息，然后他告辞离开。｜Jery,生日1999年1月1日"
+                    ),
+                    ("user","{input}"),
+                ]
+            )
+            chain = prompt | self.chatmodel 
+            summary = chain.invoke({"input":store_message,"personality_traits":self.MOODS[self.mood]["roleSet"]})
+            print("summary:",summary)
+            chat_message_history.clear()
+            chat_message_history.add_message(summary)
+            print("总结后：",chat_message_history.messages)
+        return chat_message_history
+
         
     async def generate_response(self, request: ChatRequest) -> ChatResponse:
         """Generate chat response"""
