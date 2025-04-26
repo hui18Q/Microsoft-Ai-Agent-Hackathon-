@@ -53,6 +53,16 @@ async def get_aid_topics(
 ):
     """
     获取所有援助主题（标签）
+    
+    参数:
+    - category (可选): 按标签类别筛选，可选值包括：
+      - 人群：针对特定人群的标签，如老年人、残障人士
+      - 经济状况：与经济情况相关的标签，如低收入
+      - 家庭类型：与家庭结构相关的标签，如单亲家庭
+      - 服务类型：与服务性质相关的标签，如医疗补助、住房补贴、教育资助、就业援助
+    
+    返回:
+    - 标签列表，每个标签包含id、name、description和category字段
     """
     aid_service = AidService(db)
     return aid_service.get_tags(category=category)
@@ -98,6 +108,22 @@ async def search_aid_programs(
 ):
     """
     搜索援助项目
+    
+    参数:
+    - query: 搜索关键词，将在以下字段中进行模糊匹配:
+        - 项目名称（如"老年人援助"、"教育资助"）
+        - 项目代码（如"BWE-JKM"）
+        - 项目简短描述
+        - 项目详细描述
+    
+    示例:
+    - /aid/search?query=老年人 - 搜索包含"老年人"的所有项目
+    - /aid/search?query=教育 - 搜索与教育相关的项目
+    - /aid/search?query=医疗 - 搜索与医疗相关的项目
+    - /aid/search?query=低收入 - 搜索针对低收入群体的项目
+    
+    返回:
+    - 符合搜索条件的援助项目列表，按优先级排序
     """
     aid_service = AidService(db)
     return aid_service.search_aid_programs(query=query)

@@ -6,6 +6,10 @@ from app.models.user_profile import UserProfile, UserInteraction, UserPreference
 from app.models.user import User
 import app.models
 from datetime import datetime, date
+from sqlalchemy import text
+
+# 设置为True可以强制重新创建数据（调试用）
+DEBUG_MODE = True
 
 def init_db():
     Base.metadata.create_all(bind=engine)
@@ -18,8 +22,37 @@ def seed_initial_data():
     """填充初始数据"""
     db = next(get_db())
     
-    # 检查是否已经有数据，避免重复填充
-    if db.query(AidProgram).first() is not None:
+    # 在DEBUG模式下，删除所有旧数据
+    if DEBUG_MODE:
+        print("调试模式: 删除所有现有数据...")
+        
+        # 使用 SQL 直接删除多对多关联表数据（先处理外键约束）
+        db.execute(text("DELETE FROM aid_program_tag"))
+        db.execute(text("DELETE FROM aid_program_region"))
+        db.commit()
+        print("已删除关联表数据")
+        
+        # 删除用户相关数据
+        db.execute(text("DELETE FROM user_preferences"))
+        db.execute(text("DELETE FROM user_interactions"))
+        db.execute(text("DELETE FROM application_records"))
+        db.execute(text("DELETE FROM user_profiles"))
+        db.execute(text("DELETE FROM users"))
+        db.commit()
+        print("已删除用户相关数据")
+        
+        # 先删除有外键关联的表
+        db.query(FormField).delete()
+        db.query(FormTemplate).delete()
+        
+        # 删除主表数据
+        db.query(AidProgram).delete()
+        db.query(Tag).delete()
+        db.query(Region).delete()
+        db.commit()
+        print("数据删除完成，准备重新创建...")
+    # 非调试模式下，检查是否有数据，如果有则跳过初始化
+    elif db.query(AidProgram).first() is not None:
         return
     
     # 1. 添加标签数据
@@ -59,6 +92,8 @@ def seed_initial_data():
     db.commit()
     
     # 3. 添加援助项目数据
+    current_time = datetime.utcnow()  # 使用同一时间戳
+    
     aid_programs = [
         {
             "code": "BWE-JKM",
@@ -82,7 +117,9 @@ def seed_initial_data():
             "application_phone": "03-8000-8000",
             "priority": 10,
             "tags": ["老年人", "低收入"],
-            "regions": ["吉隆坡", "槟城", "柔佛", "沙巴", "砂拉越"]
+            "regions": ["吉隆坡", "槟城", "柔佛", "沙巴", "砂拉越"],
+            "created_at": current_time,
+            "updated_at": current_time
         },
         {
             "code": "SOCSO-IP",
@@ -105,7 +142,9 @@ def seed_initial_data():
             "application_url": "https://www.perkeso.gov.my",
             "priority": 8,
             "tags": ["残障人士", "老年人"],
-            "regions": ["吉隆坡", "槟城", "柔佛", "沙巴", "砂拉越"]
+            "regions": ["吉隆坡", "槟城", "柔佛", "沙巴", "砂拉越"],
+            "created_at": current_time,
+            "updated_at": current_time
         },
         {
             "code": "PPR-KPKT",
@@ -128,7 +167,9 @@ def seed_initial_data():
             "application_url": "https://www.kpkt.gov.my",
             "priority": 7,
             "tags": ["低收入", "住房补贴"],
-            "regions": ["吉隆坡", "槟城", "柔佛"]
+            "regions": ["吉隆坡", "槟城", "柔佛"],
+            "created_at": current_time,
+            "updated_at": current_time
         }
     ]
     
@@ -338,11 +379,11 @@ def seed_initial_data():
             db.add(field)
     
     # 5. 添加示例用户和用户档案
-    # 创建一个示例用户
+    # 创建一个示例用户（注意：这里使用的是已经哈希过的密码字符串，对应明文是"password"）
     sample_user = User(
         username="demo_user",
         email="demo@example.com",
-        hashed_password="$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",  # 密码：password
+        password="$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",  # 已哈希的密码：password
         is_active=True
     )
     db.add(sample_user)
