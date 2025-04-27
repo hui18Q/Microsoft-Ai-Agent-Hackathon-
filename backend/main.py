@@ -5,8 +5,18 @@ from app.api.chat import router as chat_router
 from app.api.aid import router as aid_router
 from app.api.form import router as form_router
 from app.api.document import router as document_router
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="hello")
+
+# 配置CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # 在生产环境中应该限制为特定域名
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 async def startup_event():
