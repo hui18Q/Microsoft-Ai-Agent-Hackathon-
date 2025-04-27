@@ -15,6 +15,7 @@ import 'login/ngo_signup_page.dart';
 import 'login/ngo_login_page.dart';
 
 // Other imports
+import 'ngo_main.dart';
 import 'UserDashboardScreen.dart';
 import 'screens/ai_chatbot_screen.dart';
 import 'screens/status_tracker_screen.dart';
@@ -87,6 +88,7 @@ class MyApp extends StatelessWidget {
         '/status-tracker': (context) => const StatusTrackerScreen(),
         '/service-finder': (context) => const ServiceFinderScreen(),
         '/notifications': (context) => const NotificationsScreen(),
+        '/ngo-dashboard': (context) => const NGOApp(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/auto-fill') {

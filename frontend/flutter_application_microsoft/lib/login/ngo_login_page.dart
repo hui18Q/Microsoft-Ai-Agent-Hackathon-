@@ -136,7 +136,7 @@ class _NGOLoginPageState extends State<NGOLoginPage> {
                 height: 45,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/ngo-profile');
+                    Navigator.pushNamed(context, '/ngo-dashboard');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 7, 71, 123),
