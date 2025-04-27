@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'welcome_page.dart';
+import '../welcome_page.dart';
 import 'login_page.dart';
 import 'signup_page.dart';
 import 'forgot_password_page.dart';
