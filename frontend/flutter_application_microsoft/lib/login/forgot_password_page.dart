@@ -1,5 +1,5 @@
-import 'package:agent_ai_app/profile_page.dart';
-import 'package:agent_ai_app/signup_page.dart';
+
+import 'signup_page.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordPage extends StatefulWidget {

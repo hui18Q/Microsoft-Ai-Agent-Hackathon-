@@ -1,4 +1,20 @@
 import 'package:flutter/material.dart';
+
+// Updated imports
+import 'login/welcome_page.dart';
+import 'login/login_page.dart';
+import 'login/signup_page.dart';
+import 'login/forgot_password_page.dart';
+import 'login/reset_password_page.dart';
+import 'login/profile_page.dart';
+import 'login/edit_profile_page.dart';
+import 'login/ngo_welcome_page.dart';
+import 'login/ngo_profile_page.dart';
+import 'login/ngo_edit_profile_page.dart';
+import 'login/ngo_signup_page.dart';
+import 'login/ngo_login_page.dart';
+
+// Other imports
 import 'UserDashboardScreen.dart';
 import 'screens/ai_chatbot_screen.dart';
 import 'screens/status_tracker_screen.dart';
@@ -49,8 +65,24 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const UserDashboardScreen(),
+      initialRoute: '/', // Start with the WelcomePage
       routes: {
+        // Login-related routes
+        '/': (context) => const WelcomePage(),
+        '/login': (context) => const LoginPage(),
+        '/signup': (context) => const SignUpPage(),
+        '/forgot-password': (context) => const ForgotPasswordPage(),
+        '/reset-password': (context) => const ResetPasswordPage(),
+        '/profile': (context) => const ProfilePage(),
+        '/editprofile': (context) => const EditProfilePage(),
+        '/ngo-welcome': (context) => const NGOWelcomePage(),
+        '/ngo-profile': (context) => const NGOProfilePage(),
+        '/ngo-editprofile': (context) => const NGOEditProfilePage(),
+        '/ngo-signup': (context) => const NGOSignUpPage(),
+        '/ngo-login': (context) => const NGOLoginPage(),
+
+        // Dashboard & app screens
+        '/user-dashboard': (context) => const UserDashboardScreen(),
         '/ai-chatbot': (context) => const AIChatbotScreen(),
         '/status-tracker': (context) => const StatusTrackerScreen(),
         '/service-finder': (context) => const ServiceFinderScreen(),

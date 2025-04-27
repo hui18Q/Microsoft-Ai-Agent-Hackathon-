@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  file_picker: ^5.3.3 
   google_fonts: ^6.2.1
   url_launcher: ^6.1.14
   google_maps_flutter: ^2.5.3
@@ -72,6 +73,10 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/agent_ai_logo.png
+    - assets/apple.png
+    - assets/google.png
+    - assets/facebook.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

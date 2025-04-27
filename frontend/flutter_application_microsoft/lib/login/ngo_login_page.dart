@@ -1,16 +1,15 @@
-import 'package:agent_ai_app/forgot_password_page.dart';
-import 'package:agent_ai_app/profile_page.dart';
-import 'package:agent_ai_app/signup_page.dart';
+import 'forgot_password_page.dart';
+import 'ngo_signup_page.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class NGOLoginPage extends StatefulWidget {
+  const NGOLoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<NGOLoginPage> createState() => _NGOLoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _NGOLoginPageState extends State<NGOLoginPage> {
   bool rememberMe = false;
   bool passwordVisible = false;
 
@@ -63,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: TextField(
                   decoration: InputDecoration(
                     labelText: 'Email*',
-                    hintText: 'johndoe@xyz.com',
+                    hintText: 'yayasan@gmail.com',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -137,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 45,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/profile');
+                    Navigator.pushNamed(context, '/ngo-profile');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 7, 71, 123),
@@ -160,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const SignUpPage()),
+                        MaterialPageRoute(builder: (context) => const NGOSignUpPage()),
                       );
                     },
                     child: const Text('Sign Up'),
