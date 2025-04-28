@@ -45,10 +45,6 @@ class EmailService:
             
             logging.info(f"Connecting to SMTP server: {self.settings.SMTP_SERVER}:{self.settings.SMTP_PORT}")
             
-            # TODO: For testing purposes, simulate successful sending
-            return True
-            
-            # Real email sending code
             with smtplib.SMTP(self.settings.SMTP_SERVER, self.settings.SMTP_PORT) as server:
                 server.set_debuglevel(1)
                 server.starttls()
