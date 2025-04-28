@@ -23,12 +23,12 @@ export default function Home() {
       });
       const data = await response.json();
       if (response.ok) {
-        setMessage('验证码已发送到您的邮箱');
+        setMessage('Verification code sent to your email');
       } else {
         setError(data.detail);
       }
     } catch (err) {
-      setError('发送验证码失败，请稍后重试');
+      setError('Sending verification code failed, please try again later');
     }
   };
 
@@ -49,13 +49,13 @@ export default function Home() {
       });
       const data = await response.json();
       if (response.ok) {
-        setMessage('注册成功，请登录');
+        setMessage('Registration successful, please login');
         setIsLogin(true);
       } else {
         setError(data.detail);
       }
     } catch (err) {
-      setError('注册失败，请稍后重试');
+      setError('Registration failed, please try again later');
     }
   };
 
@@ -80,7 +80,7 @@ export default function Home() {
         setError(data.detail);
       }
     } catch (err) {
-      setError('登录失败，请稍后重试');
+      setError('Login failed, please try again later');
     }
   };
 
@@ -89,7 +89,7 @@ export default function Home() {
       <main className="flex flex-col gap-[32px] row-start-1 items-center sm:items-start">
         <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
           <div className="text-center">
-            <h2 className="text-3xl font-bold">{isLogin ? '登录' : '注册'}</h2>
+            <h2 className="text-3xl font-bold">{isLogin ? 'Login' : 'Register'}</h2>
           </div>
 
           {error && (
@@ -108,7 +108,7 @@ export default function Home() {
             <div className="space-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  邮箱
+                  Email
                 </label>
                 <input
                   id="email"
@@ -125,7 +125,7 @@ export default function Home() {
                 <>
                   <div>
                     <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                      用户名
+                      Username
                     </label>
                     <input
                       id="username"
@@ -140,7 +140,7 @@ export default function Home() {
 
                   <div>
                     <label htmlFor="verificationCode" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                      验证码
+                      Verification Code
                     </label>
                     <div className="flex gap-2">
                       <input
@@ -157,7 +157,7 @@ export default function Home() {
                         onClick={handleSendVerificationCode}
                         className="px-4 py-2 mt-1 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
                       >
-                        发送验证码
+                        Send Code
                       </button>
                     </div>
                   </div>
@@ -166,7 +166,7 @@ export default function Home() {
 
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  密码
+                  Password
                 </label>
                 <input
                   id="password"
@@ -185,7 +185,7 @@ export default function Home() {
                 type="submit"
                 className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
               >
-                {isLogin ? '登录' : '注册'}
+                {isLogin ? 'Login' : 'Register'}
               </button>
             </div>
 
@@ -199,7 +199,7 @@ export default function Home() {
                 }}
                 className="text-sm text-blue-600 hover:text-blue-500"
               >
-                {isLogin ? '没有账号？立即注册' : '已有账号？立即登录'}
+                {isLogin ? 'No account? Register now' : 'Already have an account? Login now'}
               </button>
             </div>
           </form>
