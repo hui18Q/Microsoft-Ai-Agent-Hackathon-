@@ -38,6 +38,17 @@ uvicorn main:app --reload
 
 - Swagger UI: http://localhost:8000/docs
 
+## Running the test script
+1. Make sure the backend server is running
+2. Run the test script:
+```bash
+python test_api.py
+```
+### Available test functions
+
+- `test_conversation()`: Tests continuous multi-turn conversation with memory
+- `test_chat_api()`: Tests different conversation types (general, aid inquiry, form filling, document generation)
+
 
 ## Development guide
 
