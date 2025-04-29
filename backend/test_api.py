@@ -2,82 +2,85 @@
 import requests
 import json
 import time 
-# API端点地址
+# API endpoint address
 BASE_URL = "http://localhost:8000"
 
 def test_conversation():
-    session_id = f"test_session_{int(time.time())}"  # 创建唯一会话ID
+    session_id = f"test_session_{int(time.time())}"  # Create unique session ID
     
-    # 第一轮对话：询问福利
+    # First round: Ask about benefits
     response1 = requests.post(
         f"{BASE_URL}/chat/",
-        json={"query": "我是65岁的老人，有什么福利可以申请？", "session_id": session_id}
+        json={"query": "I am a 65-year-old senior, what benefits can I apply for?", "session_id": session_id}
     )
-    print("响应1:", response1.json())
+    print("Response 1:", response1.json())
     
     time.sleep(1)
     
-    # 第二轮对话：继续询问
+    # Second round: Continue asking
     response2 = requests.post(
         f"{BASE_URL}/chat/",
-        json={"query": "这些福利怎么申请？", "session_id": session_id}
+        json={"query": "How can I apply for these benefits?", "session_id": session_id}
     )
-    print("响应2:", response2.json())
+    print("Response 2:", response2.json())
     
     time.sleep(1)
     
-    # 第三轮对话：填表相关
+    # Third round: Form filling
     response3 = requests.post(
         f"{BASE_URL}/chat/",
-        json={"query": "帮我填写BWE-JKM申请表格", "session_id": session_id}
+        json={"query": "Help me fill out the BWE-JKM application form", "session_id": session_id}
     )
-    print("响应3:", response3.json())
+    print("Response 3:", response3.json())
     
 def test_chat_api():
-    session_id = f"test_api_{int(time.time())}"  # 创建唯一会话ID
+    session_id = f"test_api_{int(time.time())}"  # Create unique session ID
     
-    # 测试一般对话
-    print("\n=== 测试一般对话 ===")
+    # Test general conversation
+    print("\n=== Testing General Conversation ===")
     response = requests.post(
-        f"{BASE_URL}/chat/",  # 修正路径
-        json={"query": "你好，请介绍一下你自己", "session_id": session_id}
+        f"{BASE_URL}/chat/",
+        json={"query": "Hello, please introduce yourself", "session_id": session_id}
     )
     print_response(response)
     
-    # 测试福利咨询
-    print("\n=== 测试福利咨询 ===")
+    # Test welfare consultation
+    print("\n=== Testing Welfare Consultation ===")
     response = requests.post(
-        f"{BASE_URL}/chat/",  # 修正路径
-        json={"query": "我是一位65岁的老人，月收入不到1000元，有什么福利可以申请？", "session_id": session_id}
+        f"{BASE_URL}/chat/",
+        json={"query": "I am a 65-year-old senior citizen with a monthly income of 900 dollars. What welfare benefits or assistance programs can I apply for?", "session_id": session_id}
     )
     print_response(response)
     
-    # 测试表单填写
-    print("\n=== 测试表单填写 ===")
+    # Test form filling
+    print("\n=== Testing Form Filling ===")
     response = requests.post(
-        f"{BASE_URL}/chat/",  # 修正路径
-        json={"query": "请帮我填写BWE-JKM申请表格", "session_id": session_id}
+        f"{BASE_URL}/chat/",
+        json={"query": "Please help me fill out the BWE-JKM application form", "session_id": session_id}
     )
     print_response(response)
     
-    # 测试文档生成
-    print("\n=== 测试文档生成 ===")
+    # Test document generation
+    print("\n=== Testing Document Generation ===")
     response = requests.post(
-        f"{BASE_URL}/chat/",  # 修正路径
-        json={"query": "请帮我写一封申请社会保障的信", "session_id": session_id}
+        f"{BASE_URL}/chat/",
+        json={"query": "Please help me write a letter applying for social security", "session_id": session_id}
     )
     print_response(response)
 
 def print_response(response):
     try:
         data = response.json()
-        print(f"状态码: {response.status_code}")
-        print(f"回复: {data.get('response')}")
-        print(f"类型: {data.get('conversation_type', '不支持')}")
+        print(f"Status code: {response.status_code}")
+        print(f"Reply: {data.get('response')}")
+        print(f"Type: {data.get('conversation_type', 'Not supported')}")
+        print(f"Query: {data.get('query')}")
+        print(f"Detected intent: {data.get('intent')}")
+        print(f"User info: {data.get('user_info')}")
     except Exception as e:
-        print(f"解析响应出错: {str(e)}")
-        print(f"原始响应: {response.text}")
+        print(f"Error parsing response: {str(e)}")
+        print(f"Raw response: {response.text}")
 
 if __name__ == "__main__":
-    # test_conversation()
-    test_chat_api()
+    test_conversation()
+    # test_chat_api()

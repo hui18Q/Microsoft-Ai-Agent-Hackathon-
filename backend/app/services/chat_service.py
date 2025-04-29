@@ -27,158 +27,152 @@ REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")  # 设置默认�
 @tool
 def search_aid_programs(query: str) -> str:
     """
-    根据用户查询搜索匹配的福利项目
+    Search for matching welfare programs based on user query
     
     Args:
-        query: 用户查询文本
+        query: User query text
         
     Returns:
-        匹配的福利项目列表的文本描述
+        Text description of matching welfare programs
     """
     try:
-        # 从查询中提取关键词
+        # Extract keywords from query
         keywords = extract_keywords(query)
         
-        # 从查询中提取用户信息
+        # Extract user info from query
         user_info = {}
-        age_match = re.search(r'(\d{1,2})[^\d]*(岁|年龄)', query)
+        age_match = re.search(r'(\d{1,2})[^\d]*(years|year|old|age)', query)
         if age_match:
             user_info['age'] = int(age_match.group(1))
         
-        income_match = re.search(r'收入[是为约]?(\d+)[^\d]*(元|块|rm|RM)', query)
+        income_match = re.search(r'income[^\d]*(\d+)', query)
         if income_match:
             user_info['income'] = int(income_match.group(1))
         
-        # 使用依赖注入获取数据库会话
-        # 注意：这里我们改为模拟查询，因为我们没有实际的数据库会话
-        # 在实际环境中，请使用下面被注释的代码
-        # db = next(get_db())
-        # programs = find_programs(db, keywords, user_info)
-        
-        # 模拟查询结果
+        # Mock query results
         programs = [
             {
                 "name": "Bantuan Warga Emas (BWE)",
                 "provider": "JKM",
-                "description": "为60岁以上的老年人提供每月RM500的经济援助",
-                "eligibility": "60岁以上的马来西亚公民，无或低收入，不居住在政府资助的机构",
-                "benefit_amount": "每月RM500",
-                "application_method": "通过eBantuan JKM在线申请或前往最近的社会福利部门办公室"
+                "description": "Monthly financial assistance of RM500 for seniors over 60",
+                "eligibility": "Malaysian citizens over 60 with low or no income, not residing in government-funded institutions",
+                "benefit_amount": "RM500 per month",
+                "application_method": "Apply online through eBantuan JKM or visit the nearest social welfare department office"
             },
             {
-                "name": "SOCSO残疾人养老金",
+                "name": "SOCSO Disability Pension",
                 "provider": "SOCSO",
-                "description": "为因疾病/残疾而无法工作的人提供月度养老金",
-                "eligibility": "必须有SOCSO缴款记录，包括60岁以上被认证为不适合工作的人",
-                "benefit_amount": "根据缴款历史计算",
-                "application_method": "访问SOCSO网站或前往SOCSO办公室申请"
+                "description": "Monthly pension for people unable to work due to illness/disability",
+                "eligibility": "Must have SOCSO contribution records, including persons over 60 certified as unfit for work",
+                "benefit_amount": "Calculated based on contribution history",
+                "application_method": "Visit SOCSO website or SOCSO office to apply"
             }
         ]
         
         if not programs:
-            return "没有找到符合条件的福利项目。请提供更多信息，如您的年龄、收入情况或具体需求。"
+            return "No matching welfare programs found. Please provide more information, such as your age, income situation, or specific needs."
         
-        # 格式化结果
-        result = "🌟 为您找到以下适合的福利项目：\n\n"
+        # Format results
+        result = "🌟 Found the following suitable welfare programs for you:\n\n"
         for i, program in enumerate(programs, 1):
             result += f"{i}. 🏷️ {program['name']} - {program['provider']}\n"
-            result += f"• 说明: {program['description']}\n"
-            result += f"• 资格条件: {program['eligibility']}\n"
-            result += f"• 福利金额: {program['benefit_amount']}\n"
-            result += f"• 申请方式: {program['application_method']}\n\n"
+            result += f"• Description: {program['description']}\n"
+            result += f"• Eligibility: {program['eligibility']}\n"
+            result += f"• Benefit Amount: {program['benefit_amount']}\n"
+            result += f"• How to Apply: {program['application_method']}\n\n"
         
         return result
     except Exception as e:
-        print(f"搜索福利项目时出错: {str(e)}")
-        return "抱歉，搜索福利项目时发生错误。请稍后再试。"
+        print(f"Error searching welfare programs: {str(e)}")
+        return "Sorry, an error occurred while searching for welfare programs. Please try again later."
 
 # 添加工具函数用于获取表单模板
 @tool
 def get_form_template(program_id: str) -> str:
     """
-    获取特定福利项目的申请表单模板
+    Get application form template for a specific welfare program
     
     Args:
-        program_id: 福利项目ID
+        program_id: Welfare program ID
         
     Returns:
-        表单模板的文本描述
+        Text description of the form template
     """
     try:
-        # 模拟表单模板数据
+        # Mock form template data
         template = {
-            "name": "Bantuan Warga Emas申请表",
+            "name": "Bantuan Warga Emas Application Form",
             "sections": [
                 {
-                    "name": "个人信息",
+                    "name": "Personal Information",
                     "fields": [
-                        {"label": "全名", "required": True, "help_text": "请输入您的完整姓名，与身份证一致"},
-                        {"label": "身份证号码", "required": True, "help_text": "请输入您的身份证号码"},
-                        {"label": "出生日期", "required": True, "help_text": "请输入您的出生日期，格式：DD/MM/YYYY"}
+                        {"label": "Full Name", "required": True, "help_text": "Enter your complete name as shown on your ID card"},
+                        {"label": "ID Number", "required": True, "help_text": "Enter your ID number"},
+                        {"label": "Date of Birth", "required": True, "help_text": "Enter your date of birth in format: DD/MM/YYYY"}
                     ]
                 },
                 {
-                    "name": "联系信息",
+                    "name": "Contact Information",
                     "fields": [
-                        {"label": "手机号码", "required": True, "help_text": "请输入您的手机号码"},
-                        {"label": "邮箱地址", "required": False, "help_text": "请输入您的邮箱地址（如有）"},
-                        {"label": "居住地址", "required": True, "help_text": "请输入您目前的居住地址"}
+                        {"label": "Mobile Number", "required": True, "help_text": "Enter your mobile phone number"},
+                        {"label": "Email Address", "required": False, "help_text": "Enter your email address (if available)"},
+                        {"label": "Residential Address", "required": True, "help_text": "Enter your current residential address"}
                     ]
                 },
                 {
-                    "name": "财务信息",
+                    "name": "Financial Information",
                     "fields": [
-                        {"label": "月收入", "required": True, "help_text": "请输入您的月收入金额（RM）"},
-                        {"label": "收入来源", "required": True, "help_text": "请选择您的主要收入来源"},
-                        {"label": "是否有其他经济支持", "required": True, "help_text": "请说明您是否有其他经济支持（如家人支持）"}
+                        {"label": "Monthly Income", "required": True, "help_text": "Enter your monthly income amount (RM)"},
+                        {"label": "Income Source", "required": True, "help_text": "Select your main source of income"},
+                        {"label": "Other Financial Support", "required": True, "help_text": "Indicate if you have other financial support (e.g., family support)"}
                     ]
                 }
             ]
         }
         
         if not template:
-            return f"未找到ID为{program_id}的福利项目申请表单。"
+            return f"Form template for program ID {program_id} not found."
         
-        # 格式化表单字段
-        result = f"📝 {template['name']}申请表单\n\n"
+        # Format form fields
+        result = f"📝 {template['name']}\n\n"
         
         for section in template['sections']:
             result += f"## {section['name']}\n"
             
             for field in section['fields']:
-                required = "（必填）" if field['required'] else "（选填）"
-                result += f"• {field['label']}{required}: {field['help_text']}\n"
+                required = "(Required)" if field['required'] else "(Optional)"
+                result += f"• {field['label']} {required}: {field['help_text']}\n"
         
-        result += "\n请问您想开始填写这个表单吗？或者需要我帮您解释某个部分？"
+        result += "\nWould you like to start filling out this form? Or do you need me to explain any section?"
         
         return result
     except Exception as e:
-        print(f"获取表单模板时出错: {str(e)}")
-        return "抱歉，获取表单模板时发生错误。请稍后再试。"
+        print(f"Error getting form template: {str(e)}")
+        return "Sorry, an error occurred while retrieving the form template. Please try again later."
 
 # 辅助函数：从查询中提取关键词
 def extract_keywords(query: str) -> List[str]:
-    # 简单实现，实际可用NLP技术改进
+    # Simple implementation, can be improved with NLP techniques
     keywords = []
     
-    # 检测年龄相关
-    if re.search(r'老人|年长|老年|年迈|60岁|65岁|70岁', query):
+    # Detect age-related
+    if re.search(r'senior|elderly|old|age|60|65|70', query):
         keywords.append('elderly')
         
-    # 检测残疾相关
-    if re.search(r'残疾|残障|伤残|行动不便|失能', query):
+    # Detect disability-related
+    if re.search(r'disability|disabled|handicap|mobility', query):
         keywords.append('disability')
         
-    # 检测低收入相关
-    if re.search(r'低收入|贫困|经济困难|无收入|收入低', query):
+    # Detect low-income related
+    if re.search(r'low income|poor|financial difficulty|no income', query):
         keywords.append('low_income')
         
-    # 检测医疗相关
-    if re.search(r'医疗|医保|看病|住院|治疗|药品', query):
+    # Detect healthcare-related
+    if re.search(r'medical|healthcare|doctor|hospital|treatment|medicine', query):
         keywords.append('healthcare')
         
-    # 检测住房相关
-    if re.search(r'住房|租房|租金|购房|房屋|居住', query):
+    # Detect housing-related
+    if re.search(r'housing|rent|rental|home|house|accommodation', query):
         keywords.append('housing')
     
     return keywords if keywords else ['general']
@@ -235,10 +229,10 @@ class ChatService:
         
         # 添加对话类型定义
         self.CONVERSATION_TYPES = {
-            "general": "一般对话",
-            "aid_inquiry": "援助项目咨询",
-            "form_filling": "表单填写助手",
-            "document_generation": "文档生成"
+            "general": "General Conversation",
+            "aid_inquiry": "Aid Program Inquiry",
+            "form_filling": "Form Filling Assistant",
+            "document_generation": "Document Generation"
         }
         
         # 当前对话类型
@@ -367,7 +361,7 @@ class ChatService:
                 [
                     (
                         "system",
-                        self.SYSTEM_PROMPT+"\n这是一段你和用户的对话记忆，对其进行总结摘要，摘要使用第一人称'我'，并且提取其中的用户关键信息，如姓名、年龄、性别、出生日期等。以如下格式返回:\n 总结摘要内容｜用户关键信息 \n 例如 用户Jery问候我，我礼貌回复，然后他询问相关信息，我回答了他相关信息，然后他告辞离开。｜Jery,生日1999年1月1日"
+                        self.SYSTEM_PROMPT+"\nThis is a conversation memory between you and the user. Summarize it and extract key user information such as name, age, gender, date of birth, etc. Return in this format:\n Summary Content | User Key Information \nFor example: User Jerry greeted me, I responded politely, then he asked about related information, I provided the information, then he said goodbye. | Jerry, birthdate January 1, 1999"
                     ),
                     ("user","{input}"),
                 ]
@@ -382,46 +376,50 @@ class ChatService:
     
     # 新增：对话意图识别函数
     def detect_conversation_intent(self, query: str) -> str:
-        """识别用户查询的意图类型"""
+        """Detect the intent type of user query"""
         
-        # 福利咨询相关关键词
-        aid_keywords = ["福利", "补助", "援助", "申请", "资格", "政府项目", "社会保障", 
-                        "低收入", "残疾", "老人", "养老金", "医疗补助"]
+        # Aid consultation related keywords
+        aid_keywords = ["benefit", "benefits", "assistance", "aid", "apply", "application",
+                       "eligibility", "government program", "social security", "welfare",
+                       "low income", "disability", "elderly", "senior", "pension", "medical assistance",
+                       "support", "financial help", "grant", "allowance", "subsidy"]
         
-        # 表单填写相关关键词
-        form_keywords = ["表格", "填写", "申请表", "提交", "表单", "资料", "证明", 
-                         "如何填", "怎么填", "帮我填"]
+        # Form filling related keywords
+        form_keywords = ["form", "fill", "application form", "submit", "document", "information", 
+                        "certificate", "how to fill", "help me fill", "complete", "application process"]
         
-        # 文档生成相关关键词
-        document_keywords = ["生成文件", "生成信", "写一封", "模板", "草稿", 
-                            "申诉信", "证明信", "请求书"]
+        # Document generation related keywords
+        document_keywords = ["generate document", "generate letter", "write a letter", "template", 
+                            "draft", "appeal letter", "certificate letter", "request letter"]
         
-        # 匹配意图
-        if any(keyword in query for keyword in aid_keywords):
+        # Match intent
+        query_lower = query.lower()
+        if any(keyword in query_lower for keyword in aid_keywords):
             return "aid_inquiry"
-        elif any(keyword in query for keyword in form_keywords):
+        elif any(keyword in query_lower for keyword in form_keywords):
             return "form_filling"
-        elif any(keyword in query for keyword in document_keywords):
+        elif any(keyword in query_lower for keyword in document_keywords):
             return "document_generation"
         else:
             return "general"
     
     # 新增：获取用户信息
     def extract_user_info(self, query: str, chat_history) -> Dict[str, Any]:
-        """从查询和聊天历史中提取用户信息"""
+        """Extract user information from query and chat history"""
         user_info = {}
         
-        # 提取年龄
-        age_match = re.search(r'(\d{1,2})[^\d]*(岁|年龄)', query)
+        # Extract age - improved regex to match more patterns
+        age_match = re.search(r'(\d{1,2})[\s-]*(?:years?|yrs?|year-?old|y\.?o\.?|age)', query.lower())
         if age_match:
             user_info['age'] = int(age_match.group(1))
         
-        # 提取收入
-        income_match = re.search(r'收入[是为约]?(\d+)[^\d]*(元|块|rm|RM)', query)
+        # Extract income - improved regex to match more patterns
+        income_match = re.search(r'(?:income|earn|making|salary)[^\d]*?(\d+)', query.lower())
         if income_match:
             user_info['income'] = int(income_match.group(1))
         
-        # TODO: 从聊天历史中提取更多信息
+        # Add debug output
+        print(f"Extracted user info: {user_info}")
         
         return user_info
         
@@ -467,6 +465,6 @@ class ChatService:
             import traceback
             traceback.print_exc()
             return ChatResponse(
-                response=f"对不起，我现在无法回答您的问题。请稍后再试。",
+                response=f"I'm sorry, I cannot answer your question right now. Please try again later.",
                 status="error"
             )

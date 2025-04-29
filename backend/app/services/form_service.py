@@ -11,7 +11,7 @@ class FormService:
         self.db = db
     
     def get_form_templates(self, aid_program_id: Optional[int] = None) -> List[FormTemplate]:
-        """获取表单模板列表，可按援助项目筛选"""
+        """Get list of form templates, can be filtered by aid program"""
         query = self.db.query(FormTemplate).filter(FormTemplate.is_active == True)
         
         if aid_program_id is not None:
@@ -20,26 +20,26 @@ class FormService:
         return query.all()
     
     def get_form_template(self, template_id: int) -> Optional[FormTemplate]:
-        """获取特定表单模板的详细信息"""
+        """Get detailed information for a specific form template"""
         return self.db.query(FormTemplate).filter(
             FormTemplate.id == template_id,
             FormTemplate.is_active == True
         ).first()
     
     def create_form_session(self, session_data: FormSessionCreate) -> FormSession:
-        """开始新的表单填写会话"""
-        # 获取表单模板
+        """Start a new form filling session"""
+        # Get form template
         template = self.get_form_template(session_data.form_template_id)
         if not template:
-            raise ValueError("表单模板不存在")
+            raise ValueError("Form template does not exist")
         
-        # 找出第一个分区
+        # Find the first section
         first_section = None
         if template.sections and len(template.sections) > 0:
             sections = sorted(template.sections, key=lambda x: x.get('order', 0))
             first_section = sections[0].get('name')
         
-        # 创建会话
+        # Create session
         db_session = FormSession(
             user_id=session_data.user_id,
             form_template_id=session_data.form_template_id,
@@ -252,10 +252,10 @@ class FormService:
         }
     
     def _validate_field_updates(self, session: FormSession, field_updates: Dict[str, Any]) -> Dict[str, str]:
-        """验证字段更新"""
+        """Validate field updates"""
         errors = {}
         
-        # 获取字段定义
+        # Get field definitions
         fields = self.db.query(FormField).filter(
             FormField.form_template_id == session.form_template_id,
             FormField.name.in_(field_updates.keys())
@@ -265,35 +265,35 @@ class FormService:
         
         for field_name, value in field_updates.items():
             if field_name not in field_dict:
-                errors[field_name] = "字段不存在"
+                errors[field_name] = "Field does not exist"
                 continue
             
             field = field_dict[field_name]
             
-            # 检查必填字段
+            # Check required fields
             if field.is_required and (value is None or value == ""):
-                errors[field_name] = "此字段为必填项"
+                errors[field_name] = "This field is required"
                 continue
             
-            # 检查验证规则
+            # Check validation rules
             if field.validation_rules and value is not None:
                 for rule in field.validation_rules:
-                    # 这里可以实现各种验证规则
-                    # 简单示例：
+                    # Implementation of various validation rules
+                    # Simple examples:
                     rule_type = rule.get("type")
                     rule_value = rule.get("value")
                     
                     if rule_type == "min" and isinstance(value, (int, float)) and value < rule_value:
-                        errors[field_name] = rule.get("message", f"值必须大于等于 {rule_value}")
+                        errors[field_name] = rule.get("message", f"Value must be greater than or equal to {rule_value}")
                     
                     elif rule_type == "max" and isinstance(value, (int, float)) and value > rule_value:
-                        errors[field_name] = rule.get("message", f"值必须小于等于 {rule_value}")
+                        errors[field_name] = rule.get("message", f"Value must be less than or equal to {rule_value}")
                     
                     elif rule_type == "min_length" and isinstance(value, str) and len(value) < rule_value:
-                        errors[field_name] = rule.get("message", f"长度必须大于等于 {rule_value}")
+                        errors[field_name] = rule.get("message", f"Length must be greater than or equal to {rule_value}")
                     
                     elif rule_type == "max_length" and isinstance(value, str) and len(value) > rule_value:
-                        errors[field_name] = rule.get("message", f"长度必须小于等于 {rule_value}")
+                        errors[field_name] = rule.get("message", f"Length must be less than or equal to {rule_value}")
         
         return errors
     

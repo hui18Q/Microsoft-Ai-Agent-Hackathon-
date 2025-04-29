@@ -13,42 +13,42 @@ from app.models.aid_program import AidProgram
 class DocumentService:
     def __init__(self, db: Session):
         self.db = db
-        # 文档存储目录
+        # Document storage directory
         self.document_dir = os.getenv("DOCUMENT_STORAGE_PATH", "./documents")
         os.makedirs(self.document_dir, exist_ok=True)
     
     async def generate_document(self, session_id: int, document_type: str = "application") -> Dict[str, Any]:
-        """根据已完成的表单生成申请文档"""
-        # 获取表单会话
+        """Generate application document based on completed form"""
+        # Get form session
         session = self.db.query(FormSession).filter(FormSession.id == session_id).first()
         if not session:
             return {
                 "success": False,
-                "message": "表单会话不存在"
+                "message": "Form session does not exist"
             }
         
         if not session.is_completed:
             return {
                 "success": False,
-                "message": "表单尚未完成"
+                "message": "Form is not completed yet"
             }
         
-        # 获取援助项目信息
+        # Get aid program information
         template = self.db.query(FormTemplate).filter(FormTemplate.id == session.form_template_id).first()
         if not template:
             return {
                 "success": False,
-                "message": "表单模板不存在"
+                "message": "Form template does not exist"
             }
         
         program = None
         if template.aid_program_id:
             program = self.db.query(AidProgram).filter(AidProgram.id == template.aid_program_id).first()
         
-        # 生成文档标识符
+        # Generate document identifier
         document_id = str(uuid.uuid4())
         
-        # 生成文档内容
+        # Generate document content
         document_content = self._generate_document_content(
             session=session,
             template=template,
@@ -56,11 +56,11 @@ class DocumentService:
             document_type=document_type
         )
         
-        # 保存文档
+        # Save document
         document_path = os.path.join(self.document_dir, f"{document_id}.pdf")
         self._save_document_as_pdf(document_content, document_path)
         
-        # 创建文档记录
+        # Create document record
         document_info = {
             "id": document_id,
             "user_id": session.user_id,
@@ -71,7 +71,7 @@ class DocumentService:
             "filename": self._generate_filename(program, document_type)
         }
         
-        # 保存元数据
+        # Save metadata
         metadata_path = os.path.join(self.document_dir, f"{document_id}.json")
         with open(metadata_path, 'w') as f:
             json.dump(document_info, f)
@@ -79,19 +79,19 @@ class DocumentService:
         return {
             "success": True,
             "document_id": document_id,
-            "message": "文档已生成",
+            "message": "Document generated",
             **document_info
         }
     
     def get_document_path(self, document_id: str) -> Optional[str]:
-        """获取文档文件路径"""
+        """Get document file path"""
         document_path = os.path.join(self.document_dir, f"{document_id}.pdf")
         if os.path.exists(document_path):
             return document_path
         return None
     
     def get_document_filename(self, document_id: str) -> str:
-        """获取文档文件名"""
+        """Get document file name"""
         metadata_path = os.path.join(self.document_dir, f"{document_id}.json")
         if os.path.exists(metadata_path):
             with open(metadata_path, 'r') as f:
@@ -100,8 +100,8 @@ class DocumentService:
         return f"{document_id}.pdf"
     
     async def analyze_document(self, file: UploadFile) -> Dict[str, Any]:
-        """分析上传的文档，提取关键信息"""
-        # 保存上传的文件
+        """Analyze uploaded document and extract key information"""
+        # Save uploaded file
         temp_file_path = os.path.join(self.document_dir, f"temp_{uuid.uuid4()}.pdf")
         
         async with aiofiles.open(temp_file_path, 'wb') as out_file:
@@ -109,23 +109,23 @@ class DocumentService:
             await out_file.write(content)
         
         try:
-            # 这里可以调用文档分析API或库
-            # 简单模拟分析结果
+            # Here you can call document analysis API or library
+            # Simple mock analysis result
             analysis_result = {
                 "document_type": "official_letter",
-                "sender": "社会福利部门",
-                "recipient": "申请人",
+                "sender": "Social Welfare Department",
+                "recipient": "Applicant",
                 "date": datetime.now().isoformat(),
                 "key_items": [
-                    "申请要求",
-                    "截止日期",
-                    "联系方式"
+                    "Application Requirements",
+                    "Deadline",
+                    "Contact Information"
                 ],
-                "summary": "这是一封关于社会福利申请的官方信件，要求申请人在规定日期前提交相关材料。",
+                "summary": "This is an official letter regarding social welfare application, requiring the applicant to submit relevant materials before the specified date.",
                 "suggested_actions": [
-                    "准备个人身份证明",
-                    "填写申请表格",
-                    "提交收入证明"
+                    "Prepare personal identification",
+                    "Fill out application form",
+                    "Submit income proof"
                 ]
             }
             
@@ -134,67 +134,67 @@ class DocumentService:
                 "analysis": analysis_result
             }
         finally:
-            # 清理临时文件
+            # Clean up temporary file
             if os.path.exists(temp_file_path):
                 os.remove(temp_file_path)
     
     def get_document_templates(self, aid_program_id: Optional[int] = None) -> List[Dict[str, Any]]:
-        """获取可用的文档模板"""
-        # 这里可以从数据库或文件系统中读取文档模板
-        # 简单模拟模板列表
+        """Get available document templates"""
+        # This can retrieve document templates from database or file system
+        # Simple mock template list
         templates = [
             {
                 "id": "application_form",
-                "name": "申请表格",
-                "description": "标准申请表格模板",
+                "name": "Application Form",
+                "description": "Standard application form template",
                 "document_type": "application"
             },
             {
                 "id": "proof_of_eligibility",
-                "name": "资格证明",
-                "description": "证明申请人符合条件的文档",
+                "name": "Eligibility Proof",
+                "description": "Document proving applicant meets eligibility criteria",
                 "document_type": "proof"
             },
             {
                 "id": "income_statement",
-                "name": "收入证明",
-                "description": "申请人收入情况说明",
+                "name": "Income Statement",
+                "description": "Statement explaining applicant's income situation",
                 "document_type": "statement"
             }
         ]
         
         if aid_program_id is not None:
-            # 如果指定了援助项目，筛选相关模板
+            # If specified aid program, filter related templates
             program = self.db.query(AidProgram).filter(AidProgram.id == aid_program_id).first()
             if program:
-                # 这里可以根据项目特性筛选模板
+                # Here you can filter templates based on program characteristics
                 pass
         
         return templates
     
     async def preview_document(self, session_id: int, document_type: str = "application") -> Dict[str, Any]:
-        """预览将要生成的文档"""
-        # 获取表单会话
+        """Preview document to be generated"""
+        # Get form session
         session = self.db.query(FormSession).filter(FormSession.id == session_id).first()
         if not session:
             return {
                 "success": False,
-                "message": "表单会话不存在"
+                "message": "Form session does not exist"
             }
         
-        # 获取援助项目信息
+        # Get aid program information
         template = self.db.query(FormTemplate).filter(FormTemplate.id == session.form_template_id).first()
         if not template:
             return {
                 "success": False,
-                "message": "表单模板不存在"
+                "message": "Form template does not exist"
             }
         
         program = None
         if template.aid_program_id:
             program = self.db.query(AidProgram).filter(AidProgram.id == template.aid_program_id).first()
         
-        # 生成预览内容
+        # Generate preview content
         document_content = self._generate_document_content(
             session=session,
             template=template,
@@ -208,26 +208,26 @@ class DocumentService:
         }
     
     async def upload_completed_document(self, file: UploadFile, session_id: int) -> Dict[str, Any]:
-        """上传已完成的文档"""
-        # 获取表单会话
+        """Upload completed document"""
+        # Get form session
         session = self.db.query(FormSession).filter(FormSession.id == session_id).first()
         if not session:
             return {
                 "success": False,
-                "message": "表单会话不存在"
+                "message": "Form session does not exist"
             }
         
-        # 生成文档标识符
+        # Generate document identifier
         document_id = str(uuid.uuid4())
         
-        # 保存上传的文件
+        # Save uploaded file
         document_path = os.path.join(self.document_dir, f"{document_id}.pdf")
         
         async with aiofiles.open(document_path, 'wb') as out_file:
             content = await file.read()
             await out_file.write(content)
         
-        # 创建文档记录
+        # Create document record
         document_info = {
             "id": document_id,
             "user_id": session.user_id,
@@ -238,7 +238,7 @@ class DocumentService:
             "original_filename": file.filename
         }
         
-        # 保存元数据
+        # Save metadata
         metadata_path = os.path.join(self.document_dir, f"{document_id}.json")
         with open(metadata_path, 'w') as f:
             json.dump(document_info, f)
@@ -246,13 +246,13 @@ class DocumentService:
         return {
             "success": True,
             "document_id": document_id,
-            "message": "文档已上传",
+            "message": "Document uploaded",
             **document_info
         }
     
     async def explain_document(self, file: UploadFile, preferred_language: Optional[str] = None) -> Dict[str, Any]:
-        """解释上传的文档内容，使用简单语言"""
-        # 保存上传的文件
+        """Explain uploaded document content, using simple language"""
+        # Save uploaded file
         temp_file_path = os.path.join(self.document_dir, f"temp_{uuid.uuid4()}.pdf")
         
         async with aiofiles.open(temp_file_path, 'wb') as out_file:

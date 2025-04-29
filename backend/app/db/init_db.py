@@ -59,14 +59,14 @@ def seed_initial_data():
     
     # 1. 添加标签数据
     tags = [
-        {"name": "老年人", "description": "针对60岁以上老年人的项目", "category": "人群"},
-        {"name": "残障人士", "description": "针对残障人士的项目", "category": "人群"},
-        {"name": "低收入", "description": "针对低收入家庭的项目", "category": "经济状况"},
-        {"name": "单亲家庭", "description": "针对单亲家庭的项目", "category": "家庭类型"},
-        {"name": "医疗补助", "description": "医疗相关的援助项目", "category": "服务类型"},
-        {"name": "住房补贴", "description": "住房相关的援助项目", "category": "服务类型"},
-        {"name": "教育资助", "description": "教育相关的援助项目", "category": "服务类型"},
-        {"name": "就业援助", "description": "就业相关的援助项目", "category": "服务类型"}
+        {"name": "Elderly", "description": "Programs for people aged 60 and above", "category": "Demographics"},
+        {"name": "Disabled", "description": "Programs for people with disabilities", "category": "Demographics"},
+        {"name": "Low Income", "description": "Programs for low-income households", "category": "Economic Status"},
+        {"name": "Single Parent", "description": "Programs for single-parent families", "category": "Family Type"},
+        {"name": "Medical Aid", "description": "Medical-related assistance programs", "category": "Service Type"},
+        {"name": "Housing Subsidy", "description": "Housing-related assistance programs", "category": "Service Type"},
+        {"name": "Education Grant", "description": "Education-related assistance programs", "category": "Service Type"},
+        {"name": "Employment Aid", "description": "Employment-related assistance programs", "category": "Service Type"}
     ]
     
     tag_objects = {}
@@ -77,11 +77,11 @@ def seed_initial_data():
     
     # 2. 添加地区数据
     regions = [
-        {"name": "吉隆坡", "country": "马来西亚", "code": "MY-KL"},
-        {"name": "槟城", "country": "马来西亚", "code": "MY-PG"},
-        {"name": "柔佛", "country": "马来西亚", "code": "MY-JH"},
-        {"name": "沙巴", "country": "马来西亚", "code": "MY-SB"},
-        {"name": "砂拉越", "country": "马来西亚", "code": "MY-SR"}
+        {"name": "Kuala Lumpur", "country": "Malaysia", "code": "MY-KL"},
+        {"name": "Penang", "country": "Malaysia", "code": "MY-PG"},
+        {"name": "Johor", "country": "Malaysia", "code": "MY-JH"},
+        {"name": "Sabah", "country": "Malaysia", "code": "MY-SB"},
+        {"name": "Sarawak", "country": "Malaysia", "code": "MY-SR"}
     ]
     
     region_objects = {}
@@ -101,25 +101,25 @@ def seed_initial_data():
             "code": "BWE-JKM",
             "name": "Bantuan Warga Emas (BWE) - JKM",
             "program_type": "financial_aid",
-            "short_description": "为60岁以上的马来西亚老年人提供每月RM500的经济援助",
-            "full_description": "Bantuan Warga Emas (BWE)是由马来西亚社会福利局(JKM)管理的一项援助计划，旨在为60岁以上的低收入老年人提供经济支持。每月RM500的援助金直接发放给符合条件的申请人。",
-            "benefit_amount": "每月RM500",
+            "short_description": "Monthly economic assistance of RM500 for Malaysian seniors aged 60 and above",
+            "full_description": "Bantuan Warga Emas (BWE) is an assistance program managed by the Malaysian Department of Social Welfare (JKM), aimed at providing economic support to low-income seniors aged 60 and above. The monthly assistance of RM500 is directly disbursed to eligible applicants.",
+            "benefit_amount": "RM500 per month",
             "eligibility_criteria": [
-                "马来西亚公民",
-                "年龄60岁及以上",
-                "无收入或收入有限",
-                "不居住在政府资助的机构"
+                "Malaysian citizen",
+                "Age 60 and above",
+                "No income or limited income",
+                "Not residing in government-funded institutions"
             ],
             "application_process": [
-                {"step": 1, "description": "在线填写eBantuan JKM申请表或前往最近的社会福利办公室"},
-                {"step": 2, "description": "提交身份证、收入证明和其他相关文件"},
-                {"step": 3, "description": "等待申请审核和批准"}
+                {"step": 1, "description": "Fill out eBantuan JKM application form online or visit the nearest social welfare office"},
+                {"step": 2, "description": "Submit ID card, income proof, and other relevant documents"},
+                {"step": 3, "description": "Wait for application review and approval"}
             ],
             "application_url": "https://ebantuan.jkm.gov.my",
             "application_phone": "03-8000-8000",
             "priority": 10,
-            "tags": ["老年人", "低收入"],
-            "regions": ["吉隆坡", "槟城", "柔佛", "沙巴", "砂拉越"],
+            "tags": ["Elderly", "Low Income"],
+            "regions": ["Kuala Lumpur", "Penang", "Johor", "Sabah", "Sarawak"],
             "created_at": current_time,
             "updated_at": current_time
         },
@@ -204,16 +204,16 @@ def seed_initial_data():
     if bwe_program:
         # 创建表单模板
         bwe_template = FormTemplate(
-            name="BWE申请表",
-            description="Bantuan Warga Emas (BWE)计划的申请表格",
+            name="BWE Application Form",
+            description="Application form for the Bantuan Warga Emas (BWE) program",
             aid_program_id=bwe_program.id,
             sections=[
-                {"name": "personal_info", "title": "个人信息", "description": "申请人的基本信息", "order": 1},
-                {"name": "contact_info", "title": "联系信息", "description": "申请人的联系方式", "order": 2},
-                {"name": "income_info", "title": "收入信息", "description": "申请人的收入状况", "order": 3},
-                {"name": "bank_info", "title": "银行信息", "description": "用于接收援助金的银行账户信息", "order": 4}
+                {"name": "personal_info", "title": "Personal Information", "description": "Basic information of the applicant", "order": 1},
+                {"name": "contact_info", "title": "Contact Information", "description": "Contact details of the applicant", "order": 2},
+                {"name": "income_info", "title": "Income Information", "description": "Income status of the applicant", "order": 3},
+                {"name": "bank_info", "title": "Bank Information", "description": "Bank account information for receiving aid", "order": 4}
             ],
-            help_text="请填写所有必要信息以申请Bantuan Warga Emas (BWE)计划。如需帮助，请拨打03-8000-8000。"
+            help_text="Please fill in all necessary information to apply for the Bantuan Warga Emas (BWE) program. For assistance, call 03-8000-8000."
         )
         db.add(bwe_template)
         db.commit()
@@ -223,12 +223,12 @@ def seed_initial_data():
             # 个人信息部分
             {
                 "name": "full_name",
-                "label": "全名",
+                "label": "Full Name",
                 "field_type": FieldType.TEXT,
                 "section": "personal_info",
                 "order": 1,
                 "is_required": True,
-                "help_text": "请输入您的完整姓名，与身份证上的姓名一致",
+                "help_text": "Enter your complete name as it appears on your ID card",
                 "autofill_source": "full_name"
             },
             {
@@ -394,17 +394,17 @@ def seed_initial_data():
     # 创建用户档案
     sample_profile = UserProfile(
         user_id=sample_user.id,
-        full_name="演示用户",
+        full_name="Demo User",
         birth_date=date(1960, 1, 15),
         gender="male",
         id_number="600115-10-1234",
         phone_number="012-3456789",
-        address="123号，示例街",
-        city="吉隆坡",
-        state="吉隆坡",
+        address="123, Example Street",
+        city="Kuala Lumpur",
+        state="Kuala Lumpur",
         postal_code="50000",
-        country="马来西亚",
-        preferred_language="zh",
+        country="Malaysia",
+        preferred_language="en",
         income="low",
         employment_status="retired"
     )
