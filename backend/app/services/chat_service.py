@@ -322,7 +322,6 @@ class ChatService:
         
         # 扩展工具集，增加福利查询和表单工具
         tools = [
-            tool_test,
             search_aid_programs,  # 新增援助项目搜索工具
             get_form_template     # 新增表单模板获取工具
         ]
