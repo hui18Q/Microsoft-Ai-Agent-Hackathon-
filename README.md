@@ -100,7 +100,7 @@ Even if users **cannot read, write, or operate a phone**, the app can be **voice
 
 ## 📷 Demo
 
-(https://drive.google.com/file/d/1z0qlhH9d8E-jLnRLvnym3mwTtRLQop7Y/view?usp=sharing)
+https://drive.google.com/file/d/1z0qlhH9d8E-jLnRLvnym3mwTtRLQop7Y/view?usp=sharing
 
 ---
 
