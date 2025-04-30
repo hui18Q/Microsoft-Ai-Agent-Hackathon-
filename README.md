@@ -6,7 +6,7 @@
 
 ## 🔍 Project Overview
 
-CareBridge AI is an AI assistant designed for underserved communities. It helps users understand government documents, apply for social benefits, and locate nearby support services. The system supports multilingual voice interaction and simple, guided steps — ideal for people unfamiliar with technology.
+CivicAid is an AI assistant designed for underserved communities. It helps users understand government documents, apply for social benefits, and locate nearby support services. The system supports multilingual voice interaction and simple, guided steps — ideal for people unfamiliar with technology.
 
 ### ❓ Problem Statement
 - Many vulnerable individuals (elderly, disabled, immigrants, low-income families) struggle to access government or NGO support.
