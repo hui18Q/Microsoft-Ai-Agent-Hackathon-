@@ -1,4 +1,4 @@
-# 🧠 CareBridge AI – AI Copilot for Vulnerable Groups
+# 🧠 CivicAid – AI Copilot for Vulnerable Groups
 
 **An AI-powered multilingual voice assistant to help vulnerable populations access government and social services.**
 
@@ -46,13 +46,6 @@ CivicAid is an AI assistant designed for underserved communities. It helps users
 - Provides multilingual voice interaction using **Azure Speech Services**
 - Translates in real time using **Azure Translator**
 - Retrieves location-based service info via **Azure or Bing Maps API**
-
----
-
-## 🧱 Architecture Diagram
-
-
-(*Visual diagram to be added later*)
 
 ---
 
@@ -105,9 +98,9 @@ Even if users **cannot read, write, or operate a phone**, the app can be **voice
 
 ---
 
-## 📷 Screenshots & Demo
+## 📷 Demo
 
-*(To be added: Figma mockups, screenshots, and demo video)*
+(https://drive.google.com/file/d/1z0qlhH9d8E-jLnRLvnym3mwTtRLQop7Y/view?usp=sharing)
 
 ---
 
